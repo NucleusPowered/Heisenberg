@@ -5,7 +5,7 @@ Nucleus Heisenberg
 * [Issues]
 * [Discord]
 
-Licence: [MIT](LICENSE.md) (except for the Nucleus logo, which is all rights reserved)
+Licence: [MIT](LICENSE.txt) (except for the Nucleus logo, which is all rights reserved)
 
 The GeoIP module from Nucleus now on its own.
 
