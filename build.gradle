@@ -1,0 +1,108 @@
+plugins {
+    id 'idea'
+    id 'eclipse'
+    id 'com.github.hierynomus.license' version '0.12.1'
+    id 'ninja.miserable.blossom' version '1.0.1'
+    //   id 'maven'
+    id 'com.github.johnrengelman.shadow' version '2.0.0'
+    id 'java'
+    id 'org.spongepowered.plugin' version '0.9.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'signing'
+
+defaultTasks 'licenseFormat build'
+
+group = pluginGroup
+version = pluginVersion
+
+def minecraftversion = '1.12.2'
+def geoIp = 'com.maxmind.geoip2:geoip2:2.12.0'
+def spongeApi = 'org.spongepowered:spongeapi:7.1.0'
+
+dependencies {
+    compile spongeApi
+    // For Geo IP
+    compile geoIp
+
+    testCompile "junit:junit:4.12"
+    testCompile "org.mockito:mockito-all:1.10.19"
+    testCompile "org.powermock:powermock-module-junit4:1.6.4"
+    testCompile "org.powermock:powermock-api-mockito:1.6.4"
+    testCompile "org.hamcrest:hamcrest-junit:2.0.0.0"
+}
+
+license {
+    ext.name = project.name
+
+    exclude "**/*.info"
+    exclude "assets/**"
+    exclude "*.properties"
+    exclude "*.txt"
+
+    header file('HEADER.txt')
+    sourceSets = project.sourceSets
+
+    ignoreFailures false
+    strictCheck true
+
+    mapping {
+        java = 'SLASHSTAR_STYLE'
+    }
+}
+
+blossom {
+    replaceTokenIn('src/main/java/io/github/nucleuspowered/nucleusheisenberg/PluginInfo.java')
+    replaceToken '@name@', project.name
+    replaceToken '@version@', version
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': project.name, 'SpongeAPI-Version': spongeApi
+    }
+}
+
+sponge.plugin.id = pluginId
+
+shadowJar {
+    dependencies {
+        include(dependency(geoIp))
+        include(dependency("com.maxmind.db:maxmind-db"))
+        include(dependency("com.fasterxml.jackson.core:jackson-core"))
+        include(dependency("com.fasterxml.jackson.core:jackson-databind"))
+        include(dependency("com.fasterxml.jackson.core:jackson-annotations"))
+    }
+
+    relocate 'com.maxmind.geoip2', 'io.github.nucleuspowered.heisenberg.relocate.com.maxmind.geoip2'
+    relocate 'com.maxmind.db', 'io.github.nucleuspowered.heisenberg.relocate.com.maxmind.db'
+    relocate 'com.fasterxml.jackson', 'io.github.nucleuspowered.heisenberg.relocate.com.fasterxml.jackson'
+
+    archiveName = "Heisenberg-${version}-MC${minecraftversion}.jar"
+    //shadowJar.archiveName = shadowName
+    // archiveName = "Nucleus-${version}-MC${project.ext.minecraftversion}-plugin.jar"
+}
+
+artifacts {
+    archives shadowJar
+    shadow shadowJar
+}
+
+signing {
+    required {
+        project.properties.hasProperty("signing.keyId")
+    }
+
+    if (project.properties.containsKey('gpg2')) {
+        useGpgCmd() // requires gpg2
+    }
+
+    // sign configurations.archives
+    // we want to add the signatures to this configuration too, as this
+    // is what we use to upload to Ore
+    configuration=configurations.shadow
+    sign configurations.shadow
+}
+
+signShadow.dependsOn(shadowJar).mustRunAfter(shadowJar)
