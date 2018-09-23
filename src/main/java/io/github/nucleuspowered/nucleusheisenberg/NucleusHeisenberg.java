@@ -17,6 +17,7 @@ import ninja.leaping.configurate.objectmapping.ObjectMapper;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
@@ -62,11 +63,23 @@ public class NucleusHeisenberg {
         Sponge.getCommandManager().register(
                 this,
                 CommandSpec.builder()
+                    .permission("heisenberg.lookup")
                     .child(
                             CommandSpec.builder()
+                                    .permission("heisenberg.update")
                                     .executor(new GeoIpUpdateCommand(this))
                                     .build()
                             , "update"
+                    )
+                    .child(
+                            CommandSpec.builder()
+                                    .executor((s, a) -> {
+                                        reload();
+                                        s.sendMessage(Text.of("Heisenberg Reloaded"));
+                                        return CommandResult.success();
+                                    })
+                                    .build()
+                            , "reload"
                     )
                     .arguments(GenericArguments.player(Text.of("player")))
                     .executor(new GeoIpCommand(this))

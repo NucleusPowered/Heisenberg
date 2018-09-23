@@ -12,6 +12,7 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
@@ -29,31 +30,34 @@ public class GeoIpCommand implements CommandExecutor {
 
     @Override public CommandResult execute(CommandSource src, CommandContext args) {
         Player player = args.requireOne("player");
-        try {
-            Optional<Country> country = this.plugin.getHandler().getDetails(player.getConnection().getAddress().getAddress()).get();
-            if (country.isPresent()) {
-                src.sendMessage(
-                        Text.of(TextColors.YELLOW, "[GeoIP] ", player
-                                        .get(Keys.DISPLAY_NAME)
-                                        .orElseGet(() -> Text.of(player.getName())),
-                                TextColors.YELLOW,
-                                "is connecting from",
-                                TextColors.GREEN,
-                                country.get().getName(),
-                                TextColors.YELLOW,
-                                "."));
+        Task.builder().async().execute(task -> {
+            try {
+                Optional<Country> country = this.plugin.getHandler().getDetails(player.getConnection().getAddress().getAddress()).get();
+                if (country.isPresent()) {
+                    src.sendMessage(
+                            Text.of(TextColors.YELLOW, "[GeoIP] ", player
+                                            .get(Keys.DISPLAY_NAME)
+                                            .orElseGet(() -> Text.of(player.getName())),
+                                    TextColors.YELLOW,
+                                    "is connecting from",
+                                    TextColors.GREEN,
+                                    country.get().getName(),
+                                    TextColors.YELLOW,
+                                    "."));
+                    return;
+                }
+            } catch (Exception ex) {
+                // ignored
             }
-            return CommandResult.success();
-        } catch (Exception ex) {
-            // ignored
-        }
 
-        src.sendMessage(
-                Text.of(TextColors.YELLOW, "[GeoIP] Cannot determine where ", player
-                                .get(Keys.DISPLAY_NAME)
-                                .orElseGet(() -> Text.of(player.getName())),
-                        TextColors.YELLOW,
-                        "is connecting from."));
+            src.sendMessage(
+                    Text.of(TextColors.YELLOW, "[GeoIP] Cannot determine where ", player
+                                    .get(Keys.DISPLAY_NAME)
+                                    .orElseGet(() -> Text.of(player.getName())),
+                            TextColors.YELLOW,
+                            "is connecting from."));
+        }).submit(this.plugin);
+
         return CommandResult.success();
     }
 }
