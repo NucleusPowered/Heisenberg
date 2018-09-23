@@ -74,15 +74,6 @@ public class NucleusHeisenberg {
                 "geoip"
         );
 
-        Sponge.getCommandManager().register(
-                this,
-                CommandSpec.builder()
-                        .arguments(GenericArguments.player(Text.of("player")))
-                        .executor(new GeoIpCommand(this))
-                        .build(),
-                "geoip"
-        );
-
         try {
             CommentedConfigurationNode cn = this.loader.load();
 
