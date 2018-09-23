@@ -19,9 +19,9 @@ the use of the Maxmind database.
 
 ## Commands
 
-`/geoip <player>` - Get GeoIP information for a player. Requires the permission `heisenberg.lookup`
-`/geoip reload` - Reload the config.
-`/geoip update` - Update the local GeoIP database. Requires the permission `heisenberg.update`
+* `/geoip <player>` - Get GeoIP information for a player. Requires the permission `heisenberg.lookup`
+* `/geoip reload` - Reload the config.
+* `/geoip update` - Update the local GeoIP database. Requires the permission `heisenberg.update`
 
 There is also the `heisenberg.login` permission if `alert-on-login` is turned on for displaying a player's location on login.
 
