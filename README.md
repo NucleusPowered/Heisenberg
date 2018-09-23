@@ -12,6 +12,19 @@ The GeoIP module from Nucleus now on its own.
 Why Heisenberg? The [Heisenberg Uncertainty Principle](https://en.wikipedia.org/wiki/Uncertainty_principle) states that you 
 cannot know both someone's position and momentum at the same time. We'll know their position! 
 
+## Usage
+
+Make sure that you accept the licence in the config file before using the plugin. This is to signify your agreement to 
+the use of the Maxmind database.
+
+## Commands
+
+`/geoip <player>` - Get GeoIP information for a player. Requires the permission `heisenberg.lookup`
+`/geoip reload` - Reload the config.
+`/geoip update` - Update the local GeoIP database. Requires the permission `heisenberg.update`
+
+There is also the `heisenberg.login` permission if `alert-on-login` is turned on for displaying a player's location on login.
+
 ## Getting and Building Heisenberg
 
 To get a copy of the Heisenberg source, ensure you have Git installed, and run the following commands from a command prompt
