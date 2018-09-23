@@ -122,10 +122,6 @@ public class NucleusHeisenberg {
         }
     }
 
-    public Path getConfigDirectory() {
-        return this.configDirectory;
-    }
-
     public GeoIpConfig getConfig() {
         return this.config.getInstance();
     }
