@@ -35,11 +35,11 @@ public class GeoIpCommand implements CommandExecutor {
                 Optional<Country> country = this.plugin.getHandler().getDetails(player.getConnection().getAddress().getAddress()).get();
                 if (country.isPresent()) {
                     src.sendMessage(
-                            Text.of(TextColors.YELLOW, "[GeoIP] ", player
+                            Text.of(TextColors.YELLOW, "[GeoIP] ", TextColors.WHITE, player
                                             .get(Keys.DISPLAY_NAME)
                                             .orElseGet(() -> Text.of(player.getName())),
                                     TextColors.YELLOW,
-                                    "is connecting from",
+                                    " is connecting from ",
                                     TextColors.GREEN,
                                     country.get().getName(),
                                     TextColors.YELLOW,
@@ -51,11 +51,11 @@ public class GeoIpCommand implements CommandExecutor {
             }
 
             src.sendMessage(
-                    Text.of(TextColors.YELLOW, "[GeoIP] Cannot determine where ", player
+                    Text.of(TextColors.YELLOW, "[GeoIP] Cannot determine where ", TextColors.WHITE, player
                                     .get(Keys.DISPLAY_NAME)
                                     .orElseGet(() -> Text.of(player.getName())),
                             TextColors.YELLOW,
-                            "is connecting from."));
+                            " is connecting from."));
         }).submit(this.plugin);
 
         return CommandResult.success();
