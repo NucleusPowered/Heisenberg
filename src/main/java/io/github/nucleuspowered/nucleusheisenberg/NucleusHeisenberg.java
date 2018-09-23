@@ -40,7 +40,6 @@ import java.nio.file.Path;
 public class NucleusHeisenberg {
 
     private final Logger logger;
-    private final Path configDirectory;
     private final ConfigurationLoader<CommentedConfigurationNode> loader;
     private final ObjectMapper<GeoIpConfig>.BoundInstance config;
     private final GeoIpDatabaseHandler handler;
@@ -53,8 +52,7 @@ public class NucleusHeisenberg {
         this.logger = logger;
         this.config = ObjectMapper.forObject(new GeoIpConfig());
         this.loader = loader;
-        this.configDirectory = configDir;
-        this.handler = new GeoIpDatabaseHandler(this, this.configDirectory);
+        this.handler = new GeoIpDatabaseHandler(this, configDir);
         this.listener = new GeoIpListener(this);
     }
 
