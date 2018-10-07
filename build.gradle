@@ -34,7 +34,7 @@ dependencies {
 }
 
 license {
-    ext.name = project.name
+    ext.name = "heisenberg"
 
     exclude "**/*.info"
     exclude "assets/**"
@@ -54,13 +54,13 @@ license {
 
 blossom {
     replaceTokenIn('src/main/java/io/github/nucleuspowered/nucleusheisenberg/PluginInfo.java')
-    replaceToken '@name@', project.name
+    replaceToken '@name@', "Nucleus Heisenberg"
     replaceToken '@version@', version
 }
 
 jar {
     manifest {
-        attributes 'Implementation-Title': project.name, 'SpongeAPI-Version': spongeApi
+        attributes 'Implementation-Title': "Nucleus Heisenberg", 'SpongeAPI-Version': spongeApi
     }
 }
 
